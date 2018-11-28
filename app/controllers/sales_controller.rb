@@ -1,10 +1,18 @@
 class SalesController < ApplicationController
   before_action :find_sale, only: [:show, :edit, :update, :destroy]
+  
+  def index
+    @sale = Sale.all
+  end
+
   def new
+    @sale = Sale.new
   end
 
   def create
     @sale = Sale.new(sale_params)
+    @sale.discount = (@sale.value - @sale.discount)
+    
     @sale.save
     redirect_to sales_path
   end
