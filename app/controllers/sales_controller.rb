@@ -11,7 +11,7 @@ class SalesController < ApplicationController
 
   def create
     @sale = Sale.new(sale_params)
-    @discounted_value = @sale.value - (@sale.value * (@sale.discount/100)
+    @discounted_value = @sale.value - (@sale.value * (@sale.discount/100))
     
     if @sale.tax == 1
       @sale.tax = 19
@@ -21,7 +21,6 @@ class SalesController < ApplicationController
       @sale.tax = 0
       @sale.total = @discounted_value
     end
-    
     @sale.save!
     redirect_to sales_done_path
   end
