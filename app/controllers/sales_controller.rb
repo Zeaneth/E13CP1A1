@@ -2,7 +2,7 @@ class SalesController < ApplicationController
   before_action :find_sale, only: [:show, :edit, :update, :destroy]
   
   def index
-    @sale = Sale.all
+    @sales = Sale.all
   end
 
   def new
@@ -11,12 +11,16 @@ class SalesController < ApplicationController
 
   def create
     @sale = Sale.new(sale_params)
-    @sale.discount = (@sale.value - @sale.discount)
-    
-    @sale.save
-    redirect_to sales_path
+    after_tax(@sale)
+    redirect_to sales_done_path
   end
 
+  def destroy
+    @sale = Sale.find(params[:id])
+    @sale.destroy
+
+    redirect_to sales_path
+  end
 
   private
 
@@ -26,5 +30,18 @@ class SalesController < ApplicationController
 
   def find_sale
     @sale = Sale.find(params[:id])
+  end
+
+  def after_tax(sale)
+    discounted_value = (sale.value - sale.discount)
+    if sale.tax == 0
+      tax = 19
+      taxed_value = (discounted.value *(1+tax))
+    else
+      tax = 0
+      taxed_value = (discounted.value)
+    end
+    sale.total = discounted_value
+    sale.save
   end
 end

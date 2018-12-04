@@ -1,0 +1,11 @@
+<% @sales.each do |sale|%>
+    <h1> Código: <%= link_to sale.cod %></h1>
+    <p> Detalle: <%= sale.detail%></p>
+    <p> Categoría: <%= sale.category%></p>
+    <p> Valor: <%= sale.value%></p>
+    <p> Descuento: <%= sale.discount%></p>
+    <p> Impuesto: <%= sale.tax%></p>
+    <p> Total: <%= sale.detail%></p>
+
+    <p> <%= link_to "Borrar", sale_destroy_path(sale), method: :delete%> </p>
+<% end %>
