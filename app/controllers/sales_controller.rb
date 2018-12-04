@@ -11,7 +11,18 @@ class SalesController < ApplicationController
 
   def create
     @sale = Sale.new(sale_params)
-    after_tax(@sale)
+    @discounted_value = @sale.value - (@sale.value * (@sale.discount/100)
+    
+    if @sale.tax == 1
+      @sale.tax = 19
+      @total = @discounted_value - (@discounted_value * (@sale.tax / 100))
+      @sale.total = @total
+    else
+      @sale.tax = 0
+      @sale.total = @discounted_value
+    end
+    
+    @sale.save!
     redirect_to sales_done_path
   end
 
@@ -21,6 +32,10 @@ class SalesController < ApplicationController
 
     redirect_to sales_path
   end
+
+  def done
+    @sale = Sale.find(params[:id])
+  end  
 
   private
 
@@ -32,16 +47,4 @@ class SalesController < ApplicationController
     @sale = Sale.find(params[:id])
   end
 
-  def after_tax(sale)
-    discounted_value = (sale.value - sale.discount)
-    if sale.tax == 0
-      tax = 19
-      taxed_value = (discounted.value *(1+tax))
-    else
-      tax = 0
-      taxed_value = (discounted.value)
-    end
-    sale.total = discounted_value
-    sale.save
-  end
 end
