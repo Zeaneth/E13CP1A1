@@ -1,1 +1,37 @@
 <h1>Se ha guardado con éxito </h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Código</th>
+      <th scope="col">Detalle</th>
+      <th scope="col">Categoría</th>
+      <th scope="col">Valor</th>
+      <th scope="col">Exento de IVA</th>
+      <th scope="col">Total</th>
+    </tr>
+  </thead>
+  <tbody>
+  <tr>
+      <th>
+        <%= @sale.cod %>
+      </th>
+      <th>
+        <%= @sale.detail %>
+      </th>
+      <th>
+        <%= @sale.category %>
+      </th>
+      <th>
+        <%= @sale.value %>
+      </th>
+      <th>
+        <%= @sale.tax %>
+      </th>
+      <th>
+        <%= @sale.total %>
+      </th>
+    </tr>
+  </tbody>
+  </table>
+<%= link_to 'Volver', sales_new_path %>

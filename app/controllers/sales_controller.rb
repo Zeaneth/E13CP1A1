@@ -11,18 +11,17 @@ class SalesController < ApplicationController
 
   def create
     @sale = Sale.new(sale_params)
-    @discounted_value = @sale.value - (@sale.value * (@sale.discount/100))
-    
+    @with_discount = @sale.value - (@sale.value * (@sale.discount / 100))
     if @sale.tax == 1
-      @sale.tax = 19
-      @total = @discounted_value - (@discounted_value * (@sale.tax / 100))
+      @total = @with_discount - (@with_discount * (19 / 100))
+      @sale.tax = "No"
       @sale.total = @total
     else
-      @sale.tax = 0
-      @sale.total = @discounted_value
+      @sale.tax = "Sí"
+      @sale.total = @with_discount
     end
     @sale.save!
-    redirect_to sales_done_path
+    redirect_to action: :done, id: @sale.id
   end
 
   def destroy
@@ -39,7 +38,7 @@ class SalesController < ApplicationController
   private
 
   def sale_params
-    params.require(:sale).permit(:cod, :detail, :category, :value, :discount, :tax, :total)
+    params.require(:sale).permit(:cod, :detail, :category, :value, :discount, :tax)
   end
 
   def find_sale
