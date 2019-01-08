@@ -16,8 +16,8 @@
     <%= f.number_field :discount, min: 0, max: 40, class: "form-control", placeholder:"Ingrese el valor del descuento (menor a 40)"%>
     
     <div class="form-group form-check">
-        <%= f.check_box :tax, class: "form-check-input"%>
-        <%= f.label :tax, "Exento de IVA", class:"form-check-label"%>
+        <%= f.check_box :tax_exempt?, class: "form-check-input"%>
+        <%= f.label :tax_exempt?, "Exento de IVA", class:"form-check-label"%>
     </div>
     <%= f.submit "Enviar", class:"btn btn-primary"%>
     </div>

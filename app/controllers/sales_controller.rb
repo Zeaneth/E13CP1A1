@@ -11,15 +11,14 @@ class SalesController < ApplicationController
 
   def create
     @sale = Sale.new(sale_params)
-    @with_discount = @sale.value - (@sale.value * (@sale.discount / 100))
-    if @sale.tax == 1
-      @total = @with_discount - (@with_discount * (19 / 100))
-      @sale.tax = "No"
-      @sale.total = @total
-    else
-      @sale.tax = "Sí"
-      @sale.total = @with_discount
-    end
+    @discount_added = @sale.value - (@sale.value * (@sale.discount / 100))
+    
+    @sale.tax   = params[:sale][:tax_exempt].to_i.zero? ? 19 : 0
+    @sale.total = @sale.value
+    @sale.discount = @sale.discount.to_i
+    @sale.total = apply_discount @sale.total, @sale.discount
+    @sale.total = apply_discount @sale.total, @sale.tax, 1
+    
     @sale.save!
     redirect_to action: :done, id: @sale.id
   end
@@ -43,6 +42,18 @@ class SalesController < ApplicationController
 
   def find_sale
     @sale = Sale.find(params[:id])
+  end
+
+  def apply_discount(value, discount, tax = 0)
+    if discount.zero?
+      value
+    else
+      if tax == 1
+        value + (value * ((discount.to_f / 100)))
+      else
+        value - (value * ((discount.to_f / 100)))
+      end
+    end
   end
 
 end
